@@ -1,0 +1,2540 @@
+=//shell basic
+#!/bin/sh
+#to run a file use command : bash filename.sh
+
+#variable initialization
+x=10
+echo "x: $x"
+
+#array initialization and fill nos in it
+echo "enter array elements separated by spaces:"
+read -a numbers
+
+#printing array elements
+echo "array elements: ${numbers[@]}"
+
+#size of array
+n=${#numbers[@]}
+
+# Print array elements using a for loop
+for ((i=0; i<n; i++)); 
+do
+    echo "${numbers[i]}"
+done
+
+#using a function
+average() {
+    sum=0
+    for num in "${numbers[@]}"; 
+    do
+        sum=$((sum + num))
+    done
+    echo "Average: $((sum/n))"
+}
+
+#function call
+average
+
+#using if else statement
+echo "Enter a number:"
+read y
+if [ $((y % 2)) -eq 0 ]; then
+    echo "$y is divisible by 2"
+else
+    echo "$y is not divisible by 2"
+fi
+
+#using while loop
+sum=0
+while [ $y -gt 0 ]; 
+do
+	digit=$((y % 10))
+	sum=$((sum + digit))
+	y=$((y / 10))
+done
+echo "Sum of digits: $sum"
+------------------------------------------------------------------------------------
+1.//shell
+
+1.Print Sum of Digits of a given number using command line argument
+PROGARM:
+
+#!/bin/bash
+
+echo "Enter the Number:"
+read number
+
+sum=0
+
+while [ $number -gt 0 ]; do
+    digit=$((number % 10))
+    sum=$((sum + digit))
+    number=$((number / 10))
+done
+
+echo "Sum of digits: $sum"
+
+
+
+
+2. Write a shell script using function for following:1)average of given numbers 2) Max  digit from given number and 3) min digit  from given number
+PROGARM:
+
+#!/bin/bash
+
+# Prompt the user to enter the number of elements
+echo "Enter the number of elements:"
+read N  # Read the user input and store it in variable N
+
+# Check if N is a positive number
+if [ "$N" -le 0 ]; then  # If N is less than or equal to 0, input is invalid
+    echo "Number of elements must be greater than zero."  # Print an error message
+    exit 1  # Exit the script with status code 1 (indicating an error)
+fi
+
+# Initialize an empty array to store the numbers
+numbers=()
+
+# Initialize a counter variable i to 1
+i=1
+echo "Enter those numbers: "
+
+# Loop to read N numbers from the user
+while [ "$i" -le "$N" ]; do
+    read num  # Read a number from the user and store it in variable num
+    numbers+=("$num")  # Append the entered number to the array
+    i=$((i + 1))  # Increment the counter i by 1
+done
+
+# Function to calculate the average of the numbers
+average() {
+    sum=0  # Initialize sum to 0
+    for num in "${numbers[@]}"; do  # Iterate through each element in the array
+        sum=$((sum + num))  # Add the current number to the sum
+    done
+    echo "Average: $((sum / N))"  # Calculate and print the average
+}
+
+# Function to find the minimum digit of a given number
+findMinDigit() {
+    echo "Enter a number to find the minimum digit:"  # Prompt the user
+    read num  # Read the number from the user
+
+    min_digit=9  # Initialize min_digit to the highest possible single digit
+    while [ "$num" -gt 0 ]; do  # Continue until all digits are processed
+        digit=$((num % 10))  # Extract the last digit of the number
+        if [ "$digit" -lt "$min_digit" ]; then  # Check if the current digit is smaller than min_digit
+            min_digit=$digit  # Update min_digit
+        fi
+        num=$((num / 10))  # Remove the last digit from the number
+    done
+    echo "Min digit: $min_digit"  # Print the minimum digit found
+}
+
+# Function to find the maximum digit of a given number
+findMaxDigit() {
+    echo "Enter a number to find the maximum digit:"  # Prompt the user
+    read num  # Read the number from the user
+
+    max_digit=0  # Initialize max_digit to the lowest possible single digit
+    while [ "$num" -gt 0 ]; do  # Continue until all digits are processed
+        digit=$((num % 10))  # Extract the last digit of the number
+        if [ "$digit" -gt "$max_digit" ]; then  # Check if the current digit is greater than max_digit
+            max_digit=$digit  # Update max_digit
+        fi
+        num=$((num / 10))  # Remove the last digit from the number
+    done
+    echo "Max digit: $max_digit"  # Print the maximum digit found
+}
+
+# Call the functions to perform the required operations
+average  # Calculate and display the average of the array elements
+findMinDigit  # Find and display the minimum digit of a given number
+findMaxDigit  # Find and display the maximum digit of a given number
+
+
+
+3. Perform sorting on given array elements
+PROGARM:
+
+#!/bin/bash
+
+# Prompt the user to enter the size of the array
+echo "Enter Size of array:"
+read N  # Read the size of the array
+
+# Initialize an empty array to store the numbers
+numbers=()
+i=1
+
+# Prompt the user to enter the numbers
+echo "Enter those numbers: "
+while [ $i -le $N ]; do  # Loop until i is less than or equal to N
+    read num  # Read the next number from the user
+    numbers+=($num)  # Append the number to the array
+    i=$((i + 1))  # Increment the counter i by 1
+done
+
+# Function to sort the array in ascending order
+sortArray() {
+    # Sort the array using the 'sort' command and store it in sorted_numbers
+    sorted_numbers=($(for i in "${numbers[@]}"; do echo $i; done | sort -n))
+    # Print the sorted array
+    echo "Sorted numbers: ${sorted_numbers[@]}"
+}
+
+# Call the sortArray function to sort and display the numbers
+sortArray
+
+
+
+4.Program to find factorial of a given number with and without recursion
+With recursion:
+PROGARM:
+#!/bin/bash
+
+# Prompt the user to enter a number
+echo "Enter the Number:"
+read Number  # Read the number from the user
+
+# Recursive function to calculate factorial
+factorial() {
+    if [ $1 -le 1 ]; then  # Base case: if the number is 1 or less
+        echo 1  # Return 1 (factorial of 0 and 1 is 1)
+    else
+        prev=$(factorial $(( $1 - 1 )))  # Recursive call to factorial function with (number - 1)
+        echo $(( $1 * prev ))  # Multiply current number by the result of the previous factorial call
+    fi
+}
+
+# Call the factorial function and store the result
+result=$(factorial $Number)
+
+# Print the factorial result
+echo "Factorial of $Number is $result"
+
+OUTPUT:
+(base) pratikvikramdavare@Pratiks-MacBook-Air os % ./factWrec.sh
+Enter the Number:
+4
+Factorial of 4 is 24
+
+
+
+Without recursion:
+PROGARM:
+#!/bin/bash
+
+# Prompt the user to enter a number
+echo "Enter the number:"
+read Number  # Read the input number from the user
+
+# Initialize the factorial variable to 1
+factorial=1
+
+# Loop from 1 to the given number
+for (( i=1; i<=Number; i++ ))
+do
+    factorial=$((factorial * i))  # Multiply the current value of factorial by i
+done
+
+# Print the calculated factorial
+echo "Factorial for $Number is $factorial"
+
+
+
+
+5.Program to check file type and permission for a given file
+PROGARM:
+
+# Create a hardcoded text file for testing
+echo "Hello World" > testfile.txt
+
+# File name to check (hardcoded)
+file="testfile.txt"
+
+# Check if the file exists
+if [ ! -e "$file" ]; then
+    echo "File does not exist."
+    exit 1
+fi
+
+# Check the type of file
+if [ -f "$file" ]; then
+    echo "$file is a regular file."
+elif [ -d "$file" ]; then
+    echo "$file is a directory."
+else
+    echo "$file is of another type."
+fi
+
+# Check read, write, and execute permissions
+if [ -r "$file" ]; then
+    echo "You have read permission on $file."
+else
+    echo "You do not have read permission on $file."
+fi
+
+if [ -w "$file" ]; then
+    echo "You have write permission on $file."
+else
+    echo "You do not have write permission on $file."
+fi
+
+if [ -x "$file" ]; then
+    echo "You have execute permission on $file."
+else
+    echo "You do not have execute permission on $file."
+fi
+
+
+
+6.Check entered string is palindrome or not?
+PROGARM:
+#!/bin/bash
+
+# Prompt the user to enter a string
+echo "Enter the string:"
+read string  # Read the input string from the user
+
+# Get the length of the string
+len=${#string}  # `len` stores the length of the string
+i=0  # Initialize index `i` to 0 for the left pointer
+flag=0  # Initialize a flag variable to 0 (indicating palindrome by default)
+
+# Loop to compare characters from both ends
+while [ $i -lt $len ]; do
+    ch1=$(echo "$string" | cut -c $((i + 1)))  # Extract character from the left
+    ch2=$(echo "$string" | cut -c $len)        # Extract character from the right
+
+    # Check if the characters are different
+    if [ "$ch1" != "$ch2" ]; then
+        flag=1  # Set flag to 1 if characters do not match
+        break   # Exit the loop as the string is not a palindrome
+    fi
+
+    i=$((i + 1))      # Move the left pointer to the right
+    len=$((len - 1))  # Move the right pointer to the left
+done
+
+# Check the value of the flag to determine if the string is a palindrome
+if [ $flag -eq 0 ]; then
+    echo "$string is a palindrome"
+else
+    echo "$string is not a palindrome"
+fi
+
+------------------------------------------------------------------------------------
+2.// System calls - Process related
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+// Function to demonstrate fork, exit, and wait system calls
+void process_related_calls() {
+    printf("Process Related System Calls:\n");
+    printf("1. Fork a process\n");
+    printf("2. Exit a process\n");
+    printf("3. Wait for a process\n");
+    printf("Enter your choice: ");
+    
+    int process_choice;
+    
+    // Reading user's choice
+    if (scanf("%d", &process_choice) != 1) {
+        printf("Invalid input\n");
+        exit(1);  // Exit if invalid input is entered
+    }
+
+    // Switch case to handle the user's choice
+    switch (process_choice) {
+        case 1: {  // Fork a process
+            pid_t pid = fork();  // Create a new process
+
+            if (pid == 0) {  // Child process
+                printf("This is the child process (PID: %d)\n", getpid());  // Print child's PID
+                exit(0);  // Exit the child process
+            } else if (pid > 0) {  // Parent process
+                printf("This is the parent process (PID: %d), created child PID: %d\n", getpid(), pid);  // Print parent's PID and the child's PID
+            } else {
+                perror("Fork failed");  // Print error message if fork fails
+            }
+            break;
+        }
+        case 2:  // Exit a process
+            printf("Exiting the process (PID: %d)...\n", getpid());  // Print the PID of the process exiting
+            exit(0);  // Exit the current process
+        case 3: {  // Wait for a process to finish
+            pid_t pid = fork();  // Create a new process
+
+            if (pid == 0) {  // Child process
+                printf("Child process (PID: %d) sleeping for 2 seconds...\n", getpid());  // Print child's PID and message
+                sleep(2);  // Sleep for 2 seconds
+                printf("Child process finished\n");  // Print message when the child finishes sleeping
+                exit(0);  // Exit the child process
+            } else if (pid > 0) {  // Parent process
+                printf("Parent process (PID: %d) waiting for child process (PID: %d) to complete...\n", getpid(), pid);  // Print parent's waiting message
+                wait(NULL);  // Parent waits for the child to finish
+                printf("Child process completed. Parent process resumed\n");  // Print message after the child completes
+            } else {
+                perror("Fork failed");  // Print error message if fork fails
+            }
+            break;
+        }
+        default:
+            printf("Invalid choice\n");  // Handle invalid choice
+    }
+}
+
+int main() {
+    process_related_calls();  // Call the function to demonstrate the system calls
+    return 0;  // Exit the main function
+}
+
+
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <stdlib.h>
+
+// Function to demonstrate file-related system calls
+void file_related_calls() {
+    printf("File Related System Calls:\n");
+    printf("1. Open and Read a file\n");
+    printf("2. Write and Close a file\n");
+    printf("3. Link and Unlink a file\n");
+    printf("4. Display file status\n");
+    printf("Enter your choice: ");
+    
+    int file_choice;
+    
+    // Reading the user's choice
+    if (scanf("%d", &file_choice) != 1) {
+        printf("Invalid input\n");
+        exit(1);  // Exit if invalid input is entered
+    }
+
+    // Switch case to handle the user's choice
+    switch (file_choice) {
+        case 1: {  // Open and Read a file
+            // Use tmpfile() to simulate file opening and reading
+            FILE *tmp = tmpfile();  // Create a temporary file in memory
+            if (tmp == NULL) {
+                perror("Error creating temporary file");  // Print error if tmpfile fails
+                break;
+            }
+
+            const char *sample_text = "This is a sample file content for testing purposes.\n";
+            fwrite(sample_text, 1, strlen(sample_text), tmp);  // Write sample content to the file
+
+            // Reset the file pointer to the beginning of the file for reading
+            fseek(tmp, 0, SEEK_SET);
+
+            char buffer[1024];  // Buffer to hold the file contents
+            size_t bytes_read = fread(buffer, 1, sizeof(buffer) - 1, tmp);  // Read file content into buffer
+            if (bytes_read == 0) {
+                perror("Error reading file");  // Print error if reading fails
+                fclose(tmp);
+                break;
+            }
+            buffer[bytes_read] = '\0';  // Null-terminate the string
+            printf("File content:\n%s\n", buffer);  // Print the file content
+            fclose(tmp);  // Close the file
+            break;
+        }
+        case 2: {  // Write and Close a file
+            // Use tmpfile() to simulate file writing
+            FILE *tmp = tmpfile();  // Create a temporary file in memory
+            if (tmp == NULL) {
+                perror("Error creating temporary file");  // Print error if tmpfile fails
+                break;
+            }
+
+            char text[1024];  // Buffer to hold user input text
+            printf("Enter the text to write: ");
+            getchar();  // Consume the newline character left by scanf
+            fgets(text, sizeof(text), stdin);  // Read user input
+
+            fwrite(text, 1, strlen(text), tmp);  // Write the text to the file
+
+            // Optionally, reset the file pointer and read the contents back
+            fseek(tmp, 0, SEEK_SET);  // Reset file pointer to the beginning
+            printf("Text written to file (in-memory simulation):\n");
+            char buffer[1024];  // Buffer to hold the file contents
+            size_t bytes_read = fread(buffer, 1, sizeof(buffer) - 1, tmp);  // Read file content into buffer
+            buffer[bytes_read] = '\0';  // Null-terminate the string
+            printf("%s\n", buffer);  // Print the content written to the file
+
+            fclose(tmp);  // Close the file
+            break;
+        }
+        case 3: {  // Link and Unlink a file
+            // Simulating link and unlink with tmpfile()
+            FILE *tmp = tmpfile();  // Create a temporary file in memory
+            if (tmp == NULL) {
+                perror("Error creating temporary file");  // Print error if tmpfile fails
+                break;
+            }
+
+            // Simulating link and unlink operations (not really performed in this case)
+            printf("Simulated link and unlink operations (no actual effect in online compilers).\n");
+            fclose(tmp);  // Close the temporary file
+            break;
+        }
+        case 4: {  // Display file status
+            // Simulating file status (not real file system access)
+            printf("Simulated file status (not real file system access in online compilers).\n");
+            printf("File Size: ~1024 bytes (simulation)\n");  // Simulated file size
+            printf("File Permissions: rw-r--r--\n");  // Simulated file permissions
+            printf("File inode: 12345 (simulation)\n");  // Simulated inode
+            break;
+        }
+        default:
+            printf("Invalid choice\n");  // Handle invalid choice
+    }
+}
+
+int main() {
+    file_related_calls();  // Call the function to demonstrate file-related system calls
+    return 0;  // Exit the main function
+}
+
+
+//communication sys call
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <string.h>
+
+// Function to demonstrate communication-related system calls (pipe and FIFO)
+void communication_related_calls() {
+    printf("Communication Related System Calls:\n");
+    printf("1. Pipe\n");
+    printf("2. FIFO\n");
+    printf("Enter your choice: ");
+    
+    int comm_choice;
+    scanf("%d", &comm_choice);  // Read the user's choice
+
+    // Switch case to handle the user's choice
+    switch (comm_choice) {
+        case 1: {  // Pipe communication
+            int fd[2];
+            pipe(fd);  // Create a pipe with file descriptors fd[0] (read) and fd[1] (write)
+
+            if (fork() == 0) {
+                // Child process: Close the read end of the pipe, write data to the pipe, and then exit
+                close(fd[0]);  // Close unused read end
+                write(fd[1], "Hello from child", 16);  // Write to the pipe
+                close(fd[1]);  // Close write end after writing
+                exit(0);  // Exit the child process
+            } else {
+                // Parent process: Close the write end of the pipe, read data from the pipe, and display it
+                close(fd[1]);  // Close unused write end
+                char buffer[1024];
+                read(fd[0], buffer, 1024);  // Read from the pipe into the buffer
+                printf("Parent received: %s\n", buffer);  // Print the received data
+                close(fd[0]);  // Close the read end after reading
+                wait(NULL);  // Wait for the child process to complete
+            }
+            break;
+        }
+        case 2: {  // FIFO communication
+            char* fifo = "/tmp/my_fifo";
+            mkfifo(fifo, 0666);  // Create a FIFO special file with read-write permissions
+
+            if (fork() == 0) {
+                // Child process: Open the FIFO for writing, write data, and then exit
+                int fd = open(fifo, O_WRONLY);  // Open FIFO for writing
+                write(fd, "Hello FIFO", 10);  // Write data to the FIFO
+                close(fd);  // Close the FIFO after writing
+                exit(0);  // Exit the child process
+            } else {
+                // Parent process: Open the FIFO for reading, read data, and display it
+                int fd = open(fifo, O_RDONLY);  // Open FIFO for reading
+                char buffer[1024];
+                read(fd, buffer, 1024);  // Read data from the FIFO into the buffer
+                printf("Parent received: %s\n", buffer);  // Print the received data
+                close(fd);  // Close the FIFO after reading
+                wait(NULL);  // Wait for the child process to complete
+                unlink(fifo);  // Remove the FIFO special file
+            }
+            break;
+        }
+        default:
+            printf("Invalid choice\n");  // Handle invalid choices
+    }
+}
+
+int main() {
+    communication_related_calls();  // Call the function to demonstrate communication system calls
+    return 0;  // Exit the main function
+}
+
+
+//info related
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+// Function to demonstrate information-related system calls (Get Process ID, Parent Process ID, and User ID)
+void information_related_calls() {
+    printf("Information Related System Calls:\n");
+    printf("1. Get Process ID\n");
+    printf("2. Get Parent Process ID\n");
+    printf("3. Get User ID\n");
+    printf("Enter your choice: ");
+    
+    int info_choice;
+    int result = scanf("%d", &info_choice);  // Capture the result of scanf to validate input
+
+    // Check if scanf was successful in reading an integer
+    if (result != 1) {
+        printf("Failed to read input. Please enter a valid number.\n");
+        return;  // Exit the function if input is invalid
+    }
+
+    // Switch case to handle the user's choice
+    switch (info_choice) {
+        case 1:  // Get Process ID
+            printf("Process ID: %d\n", getpid());  // Print the process ID of the current process
+            break;
+        case 2:  // Get Parent Process ID
+            printf("Parent Process ID: %d\n", getppid());  // Print the parent process ID of the current process
+            break;
+        case 3:  // Get User ID
+            printf("User ID: %d\n", getuid());  // Print the user ID of the current process
+            break;
+        default:
+            printf("Invalid choice\n");  // Handle invalid input choice
+    }
+}
+
+// Main function to execute the information-related system calls demonstration
+int main() {
+    information_related_calls();  // Call the function to demonstrate system calls
+    return 0;  // Exit the main function
+}
+
+-------------------------------------------------------------------------------------
+13.//bankers
+#include <iostream>
+#include <vector>
+#include <array>
+using namespace std;
+
+// Function to print a 2D matrix
+void printMatrix(vector<vector<int>> matrix)
+{
+    for (auto row : matrix) {
+        cout << "[ ";
+        for (auto val : row)
+            cout << val << " ";
+        cout << "]" << endl;
+    }
+}
+
+int main()
+{
+    int processes, numberOfResources;
+    
+    cout << "\nEnter total Number of processes: ";
+    cin >> processes;
+
+    cout << "\nEnter total Number of resources: ";
+    cin >> numberOfResources;
+
+    // Matrices for allocated, max, and need
+    vector<vector<int>> allocated(processes, vector<int>(numberOfResources + 1, 0));
+    vector<vector<int>> max(processes, vector<int>(numberOfResources + 1, 0));
+    vector<vector<int>> need(processes, vector<int>(numberOfResources + 1, 0));
+
+    // Input for allocated resources
+    for (int i = 0; i < processes; i++) {
+        int processId;
+        cout << "\nEnter process Id: ";
+        cin >> processId;
+        allocated[i][0] = processId;
+        max[i][0] = processId;
+        need[i][0] = processId;
+
+        for (int j = 1; j <= numberOfResources; j++) {
+            cout << "\nEnter allocated resource for R" << (j - 1) << ": ";
+            cin >> allocated[i][j];
+        }
+    }
+
+    // Input for maximum resources
+    for (int i = 0; i < processes; i++){
+        for (int j = 1; j <= numberOfResources; j++){
+            cout << "\nFor process with processId " << max[i][0] << " max instances of resource R" << (j - 1) << ": ";
+            cin >> max[i][j];
+        }
+    }
+
+    // Input for total resources
+    vector<int> totalResources(numberOfResources);
+    for (int i = 0; i < numberOfResources; i++){
+        cout << "Enter total instances of R" << i << ": ";
+        cin >> totalResources[i];
+    }
+
+    // Calculate the need matrix
+    for (int i = 0; i < processes; i++){
+        for (int j = 1; j <= numberOfResources; j++)
+            need[i][j] = max[i][j] - allocated[i][j];
+    }
+
+    // Print matrices
+    cout << "\nAllocated Matrix:\n";
+    printMatrix(allocated);
+
+    cout << "\nMax Matrix:\n";
+    printMatrix(max);
+
+    cout << "\nNeed Matrix:\n";
+    printMatrix(need);
+
+    // Calculate allocated resources sum per resource type
+    vector<int> allocatedResources(numberOfResources, 0);
+    for (int i = 1; i <= numberOfResources; i++){
+        for (int j = 0; j < processes; j++)
+            allocatedResources[i - 1] += allocated[j][i];
+    }
+
+    // Calculate available resources
+    vector<int> available(numberOfResources, 0);
+    for (int i = 0; i < numberOfResources; i++)
+        available[i] = totalResources[i] - allocatedResources[i];
+
+    vector<bool> statusOfProcess(processes, false);
+
+    cout << "\nAllocated: ";
+    for (int i : allocatedResources)
+        cout << i << " ";
+    cout << "\nAvailable: ";
+    for (int i : available)
+        cout << i << " ";
+    cout << endl;
+
+    // Banker's algorithm for finding the safe sequence
+    vector<int> safeSequence;
+    bool flag1 = true;
+    while (flag1){
+        flag1 = false;
+        bool flag2 = false;
+
+        for (int i = 0; i < processes; i++){
+            if (!statusOfProcess[i]){
+                flag2 = false;
+                for (int j = 1; j <= numberOfResources; j++){
+                    if (need[i][j] > available[j - 1]){
+                        flag2 = true;
+                        break;
+                    }
+                }
+
+                if (!flag2){
+                    flag1 = true;
+                    statusOfProcess[i] = true;
+                    safeSequence.push_back(allocated[i][0]);
+
+                    for (int j = 1; j <= numberOfResources; j++)
+                        available[j - 1] += allocated[i][j];
+
+                    cout << "Available resource after execution of process Id " << allocated[i][0] << ": ";
+                    for (int j : available)
+                        cout << j << " ";
+                    cout << endl;
+                }
+            }
+        }
+    }
+
+    // Check for unsafe state
+    for (bool element : statusOfProcess){
+        if (!element){
+            cout << "The system is in unsafe state" << endl;
+            return 0;
+        }
+    }
+
+    cout << "Safe sequence: ";
+    for (int seq : safeSequence)
+        cout << seq << " ";
+    cout << endl;
+
+    return 0;
+}
+---------------------------------------------------------------
+3.//g++ matrixthreads.cpp -o matrixthreads -lpthread
+//./matrixthreads
+
+#include <iostream>        // Standard input-output library
+#include <pthread.h>       // POSIX threads library
+#include <vector>          // Standard vector container
+
+using namespace std;
+
+// Global matrices for input (A, B) and results (C for addition/subtraction, D for multiplication)
+vector<vector<int>> A, B, C, D;
+int rows, cols;            // Variables for storing the number of rows and columns
+
+// Structure to store row and column indices for passing to threads
+struct ThreadData {
+    int row;
+    int col;
+};
+
+// Function for matrix addition
+void* add(void* arg) {
+    ThreadData* data = (ThreadData*) arg;  // Cast the argument to ThreadData pointer
+    // Perform element-wise addition and store in matrix C
+    C[data->row][data->col] = A[data->row][data->col] + B[data->row][data->col];
+    pthread_exit(0);       // Exit the thread
+}
+
+// Function for matrix subtraction
+void* subtract(void* arg) {
+    ThreadData* data = (ThreadData*) arg;  // Cast the argument to ThreadData pointer
+    // Perform element-wise subtraction and store in matrix C
+    C[data->row][data->col] = A[data->row][data->col] - B[data->row][data->col];
+    pthread_exit(0);       // Exit the thread
+}
+
+// Function for matrix multiplication
+void* multiply(void* arg) {
+    ThreadData* data = (ThreadData*) arg;  // Cast the argument to ThreadData pointer
+    int sum = 0;                           // Variable to store the sum of products
+    // Compute dot product for the matrix element
+    for (int i = 0; i < cols; i++) {
+        sum += A[data->row][i] * B[i][data->col];
+    }
+    D[data->row][data->col] = sum;         // Store the result in matrix D
+    pthread_exit(0);       // Exit the thread
+}
+
+int main() {
+    // Input number of rows and columns
+    cout << "Enter the number of rows and columns of the matrices: ";
+    cin >> rows >> cols;
+
+    // Resize matrices to match input dimensions
+    A.resize(rows, vector<int>(cols));
+    B.resize(rows, vector<int>(cols));
+    C.resize(rows, vector<int>(cols));
+    D.resize(rows, vector<int>(cols));
+
+    // Input elements for matrix A
+    cout << "Enter elements of matrix A:\n";
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            cin >> A[i][j];
+        }
+    }
+
+    // Input elements for matrix B
+    cout << "Enter elements of matrix B:\n";
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            cin >> B[i][j];
+        }
+    }
+
+    // Create threads for matrix addition
+    pthread_t threads[rows][cols];          // 2D array of thread identifiers
+    ThreadData threadData[rows][cols];      // 2D array to store thread data
+
+    // Initialize threads for addition
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            threadData[i][j].row = i;       // Set row index
+            threadData[i][j].col = j;       // Set column index
+            pthread_create(&threads[i][j], NULL, add, (void*) &threadData[i][j]);
+            // Create a thread for each element addition
+        }
+    }
+
+    // Wait for all addition threads to complete
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            pthread_join(threads[i][j], NULL);
+            // Wait for the thread to finish
+        }
+    }
+
+    // Output result of matrix addition
+    cout << "\nResult of Matrix Addition:\n";
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            cout << C[i][j] << " ";         // Print each element
+        }
+        cout << "\n";                       // Newline after each row
+    }
+    cout << "\n";
+
+    // Create threads for matrix subtraction
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            pthread_create(&threads[i][j], NULL, subtract, (void*) &threadData[i][j]);
+            // Create a thread for each element subtraction
+        }
+    }
+
+    // Wait for all subtraction threads to complete
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            pthread_join(threads[i][j], NULL);
+            // Wait for the thread to finish
+        }
+    }
+
+    // Output result of matrix subtraction
+    cout << "Result of Matrix Subtraction:\n";
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            cout << C[i][j] << " ";         // Print each element
+        }
+        cout << "\n";                       // Newline after each row
+    }
+    cout << "\n";
+
+    // Create threads for matrix multiplication
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            pthread_create(&threads[i][j], NULL, multiply, (void*) &threadData[i][j]);
+            // Create a thread for each element multiplication
+        }
+    }
+
+    // Wait for all multiplication threads to complete
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            pthread_join(threads[i][j], NULL);
+            // Wait for the thread to finish
+        }
+    }
+
+    // Output result of matrix multiplication
+    cout << "Result of Matrix Multiplication:\n";
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            cout << D[i][j] << " ";         // Print each element
+        }
+        cout << "\n";                       // Newline after each row
+    }
+
+    return 0;                              // Exit the program
+}
+
+--------------------------------------------------------------------
+18,19,20,21//disksched
+#include <iostream>        // Standard input-output library
+#include <vector>          // Vector container for dynamic array
+#include <algorithm>       // For sorting and finding elements
+#include <cmath>           // For absolute value calculation
+#include <iomanip>         // For formatted output
+#include <limits.h>        // For INT_MAX (used in SSTF)
+
+using namespace std;
+
+// Function to calculate and print FCFS Seek Time and Differences
+int FCFS(vector<int>& requests, int head) {
+    int seek_time = 0;                  // Initialize total seek time
+    vector<int> seek_sequence;          // Stores the order of accessed requests
+    vector<int> differences;            // Stores the differences between head and request
+
+    // Iterate through all disk requests
+    for (int i = 0; i < requests.size(); i++) {
+        seek_sequence.push_back(requests[i]);            // Add request to sequence
+        differences.push_back(abs(requests[i] - head));  // Calculate and store the difference
+        seek_time += abs(requests[i] - head);            // Add difference to total seek time
+        head = requests[i];                              // Move head to the current request
+    }
+
+    // Print FCFS result
+    cout << "FCFS\n";
+    cout << "Sequence of requests: ";
+    for (int r : seek_sequence) cout << r << " ";        // Print request sequence
+    cout << "\nDifferences: ";
+    for (int d : differences) cout << d << " ";          // Print differences
+    cout << "\nTotal Seek Time: " << seek_time << "\n\n";
+
+    return seek_time;                                    // Return total seek time
+}
+
+// Function to calculate and print SSTF Seek Time and Differences
+int SSTF(vector<int>& requests, int head) {
+    int seek_time = 0;                    // Initialize total seek time
+    vector<bool> visited(requests.size(), false); // Track visited requests
+    vector<int> seek_sequence;            // Stores the order of accessed requests
+    vector<int> differences;              // Stores the differences between head and request
+    int count = 0;                        // Counter for processed requests
+
+    // Process all requests
+    while (count < requests.size()) {
+        int closest = -1;
+        int min_dist = INT_MAX;
+
+        // Find the closest unvisited request
+        for (int i = 0; i < requests.size(); i++) {
+            if (!visited[i] && abs(requests[i] - head) < min_dist) {
+                min_dist = abs(requests[i] - head);  // Update minimum distance
+                closest = i;                         // Update index of closest request
+            }
+        }
+
+        visited[closest] = true;                  // Mark the request as visited
+        seek_sequence.push_back(requests[closest]); // Add request to sequence
+        differences.push_back(min_dist);          // Store the difference
+        seek_time += min_dist;                    // Add difference to total seek time
+        head = requests[closest];                 // Move head to the current request
+        count++;                                  // Increment processed request count
+    }
+
+    // Print SSTF result
+    cout << "SSTF\n";
+    cout << "Sequence of requests: ";
+    for (int r : seek_sequence) cout << r << " ";
+    cout << "\nDifferences: ";
+    for (int d : differences) cout << d << " ";
+    cout << "\nTotal Seek Time: " << seek_time << "\n\n";
+
+    return seek_time;
+}
+
+// Function to calculate and print SCAN Seek Time and Differences
+int SCAN(vector<int>& requests, int head) {
+    int seek_time = 0;
+    vector<int> seek_sequence, differences;
+
+    // Sort the requests for SCAN movement
+    sort(requests.begin(), requests.end());
+    // Find the position of the first request greater than or equal to head
+    int pos = distance(requests.begin(), lower_bound(requests.begin(), requests.end(), head));
+
+    // Move towards the end of the disk
+    for (int i = pos; i < requests.size(); i++) {
+        seek_sequence.push_back(requests[i]);
+        differences.push_back(abs(requests[i] - head));
+        seek_time += abs(requests[i] - head);
+        head = requests[i];
+    }
+
+    // Move back towards the beginning
+    for (int i = pos - 1; i >= 0; i--) {
+        seek_sequence.push_back(requests[i]);
+        differences.push_back(abs(requests[i] - head));
+        seek_time += abs(requests[i] - head);
+        head = requests[i];
+    }
+
+    // Print SCAN result
+    cout << "SCAN\n";
+    cout << "Sequence of requests: ";
+    for (int r : seek_sequence) cout << r << " ";
+    cout << "\nDifferences: ";
+    for (int d : differences) cout << d << " ";
+    cout << "\nTotal Seek Time: " << seek_time << "\n\n";
+
+    return seek_time;
+}
+
+// Function to calculate and print C-SCAN Seek Time and Differences
+int CSCAN(vector<int>& requests, int head) {
+    int seek_time = 0;
+    vector<int> seek_sequence, differences;
+
+    // Sort the requests for C-SCAN movement
+    sort(requests.begin(), requests.end());
+    // Find the position of the first request greater than or equal to head
+    int pos = distance(requests.begin(), lower_bound(requests.begin(), requests.end(), head));
+
+    // Move towards the end of the disk
+    for (int i = pos; i < requests.size(); i++) {
+        seek_sequence.push_back(requests[i]);
+        differences.push_back(abs(requests[i] - head));
+        seek_time += abs(requests[i] - head);
+        head = requests[i];
+    }
+
+    // Wrap around to the beginning of the disk
+    for (int i = 0; i < pos; i++) {
+        seek_sequence.push_back(requests[i]);
+        differences.push_back(abs(requests[i] - head));
+        seek_time += abs(requests[i] - head);
+        head = requests[i];
+    }
+
+    // Print C-SCAN result
+    cout << "C-SCAN\n";
+    cout << "Sequence of requests: ";
+    for (int r : seek_sequence) cout << r << " ";
+    cout << "\nDifferences: ";
+    for (int d : differences) cout << d << " ";
+    cout << "\nTotal Seek Time: " << seek_time << "\n\n";
+
+    return seek_time;
+}
+
+int main() {
+    int disk_size, head, n;
+
+    // Input disk size, initial head position, and number of requests
+    cout << "Enter the size of the disk (max cylinder number): ";
+    cin >> disk_size;
+
+    cout << "Enter the initial head position: ";
+    cin >> head;
+
+    cout << "Enter the number of disk requests: ";
+    cin >> n;
+
+    vector<int> requests(n);
+    cout << "Enter the disk requests: ";
+    for (int i = 0; i < n; i++) {
+        cin >> requests[i];
+    }
+
+    // FCFS scheduling
+    FCFS(requests, head);
+
+    // SSTF scheduling
+    SSTF(requests, head);
+
+    // SCAN scheduling
+    SCAN(requests, head);
+
+    // C-SCAN scheduling
+    CSCAN(requests, head);
+
+    return 0;
+}
+
+I/p:
+Enter the size of the disk (max cylinder number): 200
+Enter the initial head position: 50
+Enter the number of disk requests: 5
+Enter the disk requests: 100 150 10 75 120
+-------------------------------------------------------------------
+15,16,17//mem_manage
+#include <iostream>        // Standard input-output library
+#include <vector>          // For dynamic arrays (reference string, frames)
+#include <unordered_map>   // For hash map (used in FIFO and LRU)
+#include <algorithm>       // For finding elements in containers
+#include <queue>           // For FIFO queue
+
+using namespace std;
+
+// Function for FIFO Page Replacement
+int fifoPageReplacement(vector<int>& referenceString, int numberOfFrames) {
+    queue<int> pageQueue;             // Queue to store pages in FIFO order
+    unordered_map<int, bool> inFrame; // Map to check if a page is in the frame
+    int pageFaults = 0;               // Counter for page faults
+
+    // Iterate through each page in the reference string
+    for (int page : referenceString) {
+        // If page is not in the frame (page fault)
+        if (!inFrame[page]) {
+            pageFaults++;             // Increment page faults
+            // If the frame is full, remove the oldest page (FIFO)
+            if (pageQueue.size() == numberOfFrames) {
+                int removedPage = pageQueue.front(); // Get the oldest page
+                pageQueue.pop();                     // Remove it from the queue
+                inFrame[removedPage] = false;        // Mark it as not in the frame
+            }
+            // Add the new page to the frame
+            pageQueue.push(page);
+            inFrame[page] = true;     // Mark the page as in the frame
+        }
+    }
+
+    return pageFaults; // Return total number of page faults
+}
+
+// Function for LRU Page Replacement
+int lruPageReplacement(vector<int>& referenceString, int numberOfFrames) {
+    unordered_map<int, int> lastUsed; // Map to store the last usage time of each page
+    vector<int> frames;               // Vector to store current pages in the frame
+    int pageFaults = 0;               // Counter for page faults
+    int currentTime = 0;              // Time counter for tracking usage
+
+    // Iterate through each page in the reference string
+    for (int page : referenceString) {
+        currentTime++;                // Increment current time
+        auto it = find(frames.begin(), frames.end(), page);
+
+        // If page is not found in the frames (page fault)
+        if (it == frames.end()) {
+            pageFaults++;             // Increment page faults
+            // If frame is full, replace the least recently used (LRU) page
+            if (frames.size() == numberOfFrames) {
+                // Find the LRU page using last usage time
+                int lruPage = *min_element(frames.begin(), frames.end(), [&](int a, int b) {
+                    return lastUsed[a] < lastUsed[b];
+                });
+                auto lruIt = find(frames.begin(), frames.end(), lruPage);
+                frames.erase(lruIt); // Remove the LRU page from the frame
+            }
+            frames.push_back(page);   // Add the new page to the frame
+        }
+        lastUsed[page] = currentTime; // Update the last used time for the page
+    }
+
+    return pageFaults; // Return total number of page faults
+}
+
+// Function for Optimal Page Replacement
+int optimalPageReplacement(vector<int>& referenceString, int numberOfFrames) {
+    vector<int> frames;               // Vector to store current pages in the frame
+    int pageFaults = 0;               // Counter for page faults
+
+    // Iterate through each page in the reference string
+    for (int i = 0; i < referenceString.size(); i++) {
+        int page = referenceString[i];
+        auto it = find(frames.begin(), frames.end(), page);
+
+        // If page is not found in the frames (page fault)
+        if (it == frames.end()) {
+            pageFaults++;             // Increment page faults
+            // If frame is full, replace the optimal page
+            if (frames.size() == numberOfFrames) {
+                int farthest = -1;
+                int indexToReplace = -1;
+
+                // Find the page that will not be used for the longest time
+                for (int j = 0; j < frames.size(); j++) {
+                    int nextUse = -1;
+                    // Check the next occurrence of each page in the frame
+                    for (int k = i + 1; k < referenceString.size(); k++) {
+                        if (frames[j] == referenceString[k]) {
+                            nextUse = k;
+                            break;
+                        }
+                    }
+
+                    // If page is not used again, replace it
+                    if (nextUse == -1) {
+                        indexToReplace = j;
+                        break;
+                    }
+
+                    // Update the farthest page
+                    if (nextUse > farthest) {
+                        farthest = nextUse;
+                        indexToReplace = j;
+                    }
+                }
+
+                frames[indexToReplace] = page; // Replace the selected page
+            } else {
+                frames.push_back(page); // Add the new page if frame is not full
+            }
+        }
+    }
+
+    return pageFaults; // Return total number of page faults
+}
+
+int main() {
+    int numberOfFrames, numberOfPages;
+
+    // Input the number of frames and number of pages
+    cout << "Enter the number of frames: ";
+    cin >> numberOfFrames;
+
+    cout << "Enter the number of pages in the reference string: ";
+    cin >> numberOfPages;
+
+    vector<int> referenceString(numberOfPages);
+    cout << "Enter the reference string:\n";
+    for (int i = 0; i < numberOfPages; i++) {
+        cin >> referenceString[i]; // Input the reference string
+    }
+
+    // FIFO Page Replacement
+    int fifoFaults = fifoPageReplacement(referenceString, numberOfFrames);
+    cout << "\nFIFO Page Faults: " << fifoFaults;
+
+    // LRU Page Replacement
+    int lruFaults = lruPageReplacement(referenceString, numberOfFrames);
+    cout << "\nLRU Page Faults: " << lruFaults;
+
+    // Optimal Page Replacement
+    int optimalFaults = optimalPageReplacement(referenceString, numberOfFrames);
+    cout << "\nOptimal Page Faults: " << optimalFaults;
+
+    return 0;
+}
+
+I/p:
+3
+10
+7 0 1 2 0 3 0 4 2 3
+------------------------------------------------------------------------------
+4.//rw-tm
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+// Mutex for write access and reader count control
+pthread_mutex_t wrt;        // Mutex to control access for writers (write lock)
+pthread_mutex_t mutex;      // Mutex to control access to the reader count (reader lock)
+int cnt = 1;                // Shared variable (critical section data)
+int numreader = 0;          // Count of active readers
+
+// Writer thread function
+void *writer(void *wno) {
+    int writer_id = *((int *)wno); // Get writer ID
+
+    pthread_mutex_lock(&wrt); // Lock the write mutex (block other writers and readers)
+    
+    // Critical section for writer: modify shared variable
+    cnt = cnt * 2;
+    printf("Writer %d modified cnt to %d\n", writer_id, cnt);
+    
+    pthread_mutex_unlock(&wrt); // Unlock the write mutex
+
+    printf("Writer %d is leaving.\n", writer_id);
+    
+    return NULL; // Exit the thread
+}
+
+// Reader thread function
+void *reader(void *rno) {
+    int reader_id = *((int *)rno); // Get reader ID
+    
+    pthread_mutex_lock(&mutex); // Lock the mutex to update the reader count
+
+    numreader++; // Increment the number of active readers
+    if (numreader == 1) {
+        pthread_mutex_lock(&wrt); // First reader locks the write mutex
+    }
+
+    pthread_mutex_unlock(&mutex); // Unlock the mutex after updating reader count
+
+    // Critical section for reader: read shared variable
+    printf("Reader %d: read cnt as %d\n", reader_id, cnt);
+
+    pthread_mutex_lock(&mutex); // Lock the mutex to update the reader count
+
+    numreader--; // Decrement the number of active readers
+    if (numreader == 0) {
+        pthread_mutex_unlock(&wrt); // Last reader unlocks the write mutex
+    }
+
+    pthread_mutex_unlock(&mutex); // Unlock the mutex after updating reader count
+
+    printf("Reader %d is leaving.\n", reader_id);
+    
+    return NULL; // Exit the thread
+}
+
+int main() {
+    int num_readers, num_writers;
+
+    // Input number of readers and writers
+    printf("Enter the number of readers: ");
+    scanf("%d", &num_readers);
+    
+    printf("Enter the number of writers: ");
+    scanf("%d", &num_writers);
+    
+    pthread_t read[num_readers], write[num_writers]; // Arrays to store thread IDs
+
+    // Initialize mutexes
+    pthread_mutex_init(&mutex, NULL);
+    pthread_mutex_init(&wrt, NULL);
+
+    // Allocate memory for reader and writer IDs
+    int *reader_ids = (int *)malloc(num_readers * sizeof(int));
+    int *writer_ids = (int *)malloc(num_writers * sizeof(int));
+
+    // Create reader threads
+    for (int i = 0; i < num_readers; i++) {
+        reader_ids[i] = i + 1; // Assign ID to reader
+        pthread_create(&read[i], NULL, reader, (void *)&reader_ids[i]);
+    }
+
+    // Create writer threads
+    for (int i = 0; i < num_writers; i++) {
+        writer_ids[i] = i + 1; // Assign ID to writer
+        pthread_create(&write[i], NULL, writer, (void *)&writer_ids[i]);
+    }
+
+    // Wait for all reader threads to complete
+    for (int i = 0; i < num_readers; i++) {
+        pthread_join(read[i], NULL);
+    }
+
+    // Wait for all writer threads to complete
+    for (int i = 0; i < num_writers; i++) {
+        pthread_join(write[i], NULL);
+    }
+
+    // Free allocated memory for IDs
+    free(reader_ids);
+    free(writer_ids);
+
+    // Destroy mutexes
+    pthread_mutex_destroy(&mutex);
+    pthread_mutex_destroy(&wrt);
+
+    return 0;
+}
+
+---------------------------------------------------------------------------------
+6.//rw-ts
+#include <pthread.h>
+#include <semaphore.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+// Declare semaphores for writer access control and reader count access
+sem_t wrt;                  // Semaphore to control writer access
+sem_t reader_count_access;  // Semaphore to control access to the reader count
+int cnt = 1;                // Shared variable that writers modify and readers read
+int numreader = 0;          // Counter to keep track of the number of active readers
+
+// Writer thread function
+void *writer(void *wno) {
+    int writer_id = *((int *)wno);   // Retrieve the writer ID from the passed argument
+    
+    sem_wait(&wrt);                  // Wait (lock) on the wrt semaphore for exclusive access
+    
+    cnt = cnt * 2;                   // Modify the shared variable (critical section)
+    printf("Writer %d modified cnt to %d\n", writer_id, cnt); // Print the modification
+    
+    sem_post(&wrt);                  // Signal (unlock) the wrt semaphore after modification
+    
+    printf("Writer %d is leaving.\n", writer_id); // Indicate that the writer has finished
+    
+    return NULL;                     // Exit the thread
+}
+
+// Reader thread function
+void *reader(void *rno) {
+    int reader_id = *((int *)rno);   // Retrieve the reader ID from the passed argument
+    
+    sem_wait(&reader_count_access);  // Wait (lock) on the reader_count_access semaphore
+    
+    numreader++;                     // Increment the reader count
+    if (numreader == 1) {            // If this is the first reader
+        sem_wait(&wrt);              // Wait (lock) on the wrt semaphore to block writers
+    }
+    
+    sem_post(&reader_count_access);  // Signal (unlock) the reader_count_access semaphore
+    
+    printf("Reader %d: read cnt as %d\n", reader_id, cnt); // Read and print the shared variable
+    
+    sem_wait(&reader_count_access);  // Wait (lock) on the reader_count_access semaphore again
+    
+    numreader--;                     // Decrement the reader count
+    if (numreader == 0) {            // If this is the last reader
+        sem_post(&wrt);              // Signal (unlock) the wrt semaphore to allow writers
+    }
+    
+    sem_post(&reader_count_access);  // Signal (unlock) the reader_count_access semaphore
+    
+    printf("Reader %d is leaving.\n", reader_id); // Indicate that the reader has finished
+    
+    return NULL;                     // Exit the thread
+}
+
+int main() {
+    int num_readers, num_writers;    // Variables to store the number of readers and writers
+    
+    printf("Enter the number of readers: ");
+    scanf("%d", &num_readers);       // Read the number of readers from the user
+    
+    printf("Enter the number of writers: ");
+    scanf("%d", &num_writers);       // Read the number of writers from the user
+    
+    pthread_t read[num_readers], write[num_writers]; // Arrays to hold reader and writer thread identifiers
+    
+    sem_init(&wrt, 0, 1);            // Initialize the wrt semaphore with a value of 1
+    sem_init(&reader_count_access, 0, 1); // Initialize the reader_count_access semaphore with a value of 1
+    
+    int *reader_ids = (int *)malloc(num_readers * sizeof(int)); // Allocate memory for reader IDs
+    int *writer_ids = (int *)malloc(num_writers * sizeof(int)); // Allocate memory for writer IDs
+    
+    // Create reader threads
+    for (int i = 0; i < num_readers; i++) {
+        reader_ids[i] = i + 1;       // Assign reader ID
+        pthread_create(&read[i], NULL, reader, (void *)&reader_ids[i]); // Create a reader thread
+    }
+    
+    // Create writer threads
+    for (int i = 0; i < num_writers; i++) {
+        writer_ids[i] = i + 1;       // Assign writer ID
+        pthread_create(&write[i], NULL, writer, (void *)&writer_ids[i]); // Create a writer thread
+    }
+    
+    // Wait for all reader threads to finish
+    for (int i = 0; i < num_readers; i++) {
+        pthread_join(read[i], NULL); // Wait for the reader thread to finish
+    }
+    
+    // Wait for all writer threads to finish
+    for (int i = 0; i < num_writers; i++) {
+        pthread_join(write[i], NULL); // Wait for the writer thread to finish
+    }
+    
+    free(reader_ids);                // Free the allocated memory for reader IDs
+    free(writer_ids);                // Free the allocated memory for writer IDs
+    
+    sem_destroy(&wrt);               // Destroy the wrt semaphore
+    sem_destroy(&reader_count_access); // Destroy the reader_count_access semaphore
+    
+    return 0;                        // Exit the program
+}
+
+------------------------------------------------------------------------------
+5//pc-tm
+#include <pthread.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+#define MaxItems 5    // Maximum items a producer can produce or a consumer can consume
+#define BufferSize 5  // Size of the buffer
+
+int in = 0;          // Index for the next item to be produced (inserted) in the buffer
+int out = 0;         // Index for the next item to be consumed (removed) from the buffer
+int buffer[BufferSize]; // Circular buffer array
+
+pthread_mutex_t mutex;       // Mutex lock for synchronizing access to the buffer
+pthread_cond_t not_empty;    // Condition variable to indicate the buffer is not empty
+pthread_cond_t not_full;     // Condition variable to indicate the buffer is not full
+
+// Producer thread function
+void *producer(void *pno) {
+    int item;
+    for (int i = 0; i < MaxItems; i++) {
+        item = rand(); // Produce a random item
+
+        pthread_mutex_lock(&mutex); // Lock the mutex before entering the critical section
+        printf("Producer %d: Entering critical region\n", *((int *)pno));
+
+        // Wait if the buffer is full
+        while ((in + 1) % BufferSize == out) {
+            printf("Producer %d: Buffer is full. Waiting...\n", *((int *)pno));
+            pthread_cond_wait(&not_full, &mutex); // Wait for space in the buffer
+        }
+
+        // Insert the produced item into the buffer
+        buffer[in] = item;
+        printf("Producer %d: Inserted Item %d at %d\n", *((int *)pno), buffer[in], in);
+        in = (in + 1) % BufferSize; // Update the 'in' index in a circular manner
+
+        // Signal that the buffer is not empty (item available for consumption)
+        pthread_cond_signal(&not_empty);
+        printf("Producer %d: Leaving critical region\n", *((int *)pno));
+
+        pthread_mutex_unlock(&mutex); // Unlock the mutex after the critical section
+    }
+}
+
+// Consumer thread function
+void *consumer(void *cno) {
+    for (int i = 0; i < MaxItems; i++) {
+        pthread_mutex_lock(&mutex); // Lock the mutex before entering the critical section
+        printf("Consumer %d: Entering critical region\n", *((int *)cno));
+
+        // Wait if the buffer is empty
+        while (in == out) {
+            printf("Consumer %d: Buffer is empty. Waiting...\n", *((int *)cno));
+            pthread_cond_wait(&not_empty, &mutex); // Wait for items to be produced
+        }
+
+        // Remove the item from the buffer
+        int item = buffer[out];
+        printf("Consumer %d: Removed Item %d from %d\n", *((int *)cno), item, out);
+        out = (out + 1) % BufferSize; // Update the 'out' index in a circular manner
+
+        // Signal that the buffer is not full (space available for production)
+        pthread_cond_signal(&not_full);
+        printf("Consumer %d: Leaving critical region\n", *((int *)cno));
+
+        pthread_mutex_unlock(&mutex); // Unlock the mutex after the critical section
+    }
+}
+
+int main() {
+    int num_producers, num_consumers;
+
+    // Input the number of producers and consumers
+    printf("Enter the number of producers: ");
+    scanf("%d", &num_producers);
+    printf("Enter the number of consumers: ");
+    scanf("%d", &num_consumers);
+
+    // Allocate memory for producer and consumer thread arrays
+    pthread_t *pro = malloc(num_producers * sizeof(pthread_t));
+    pthread_t *con = malloc(num_consumers * sizeof(pthread_t));
+
+    // Initialize the mutex and condition variables
+    pthread_mutex_init(&mutex, NULL);
+    pthread_cond_init(&not_empty, NULL);
+    pthread_cond_init(&not_full, NULL);
+
+    // Allocate memory for producer and consumer IDs
+    int *a_pro = malloc(num_producers * sizeof(int));
+    int *a_con = malloc(num_consumers * sizeof(int));
+
+    // Create producer threads
+    for (int i = 0; i < num_producers; i++) {
+        a_pro[i] = i + 1; // Assign producer ID
+        pthread_create(&pro[i], NULL, producer, (void *)&a_pro[i]); // Create producer thread
+    }
+
+    // Create consumer threads
+    for (int i = 0; i < num_consumers; i++) {
+        a_con[i] = i + 1; // Assign consumer ID
+        pthread_create(&con[i], NULL, consumer, (void *)&a_con[i]); // Create consumer thread
+    }
+
+    // Join producer threads (wait for all producers to finish)
+    for (int i = 0; i < num_producers; i++) {
+        pthread_join(pro[i], NULL);
+    }
+
+    // Join consumer threads (wait for all consumers to finish)
+    for (int i = 0; i < num_consumers; i++) {
+        pthread_join(con[i], NULL);
+    }
+
+    // Clean up: destroy mutex and condition variables, free allocated memory
+    pthread_mutex_destroy(&mutex);
+    pthread_cond_destroy(&not_empty);
+    pthread_cond_destroy(&not_full);
+    free(pro);
+    free(con);
+    free(a_pro);
+    free(a_con);
+
+    return 0; // Exit the program
+}
+
+-----------------------------------------------------------------------------------
+7.//pc-ts
+#include <pthread.h>
+#include <semaphore.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+#define MaxItems 5    // Maximum items a producer can produce or a consumer can consume
+#define BufferSize 5  // Size of the buffer
+
+// Semaphores to manage buffer slots and mutual exclusion
+sem_t empty;  // Semaphore to track empty slots in the buffer
+sem_t full;   // Semaphore to track filled slots in the buffer
+sem_t mutex;  // Semaphore to provide mutual exclusion
+
+int in = 0;          // Index for the next item to be produced (inserted) in the buffer
+int out = 0;         // Index for the next item to be consumed (removed) from the buffer
+int buffer[BufferSize]; // Circular buffer array
+
+// Producer thread function
+void *producer(void *pno) {
+    int item;
+    for (int i = 0; i < MaxItems; i++) {
+        item = rand(); // Produce a random item
+
+        // If buffer is full, producer must wait until there is space
+        if (sem_trywait(&empty) != 0) {
+            printf("Producer %d: Buffer is full, waiting to produce...\n", *((int *)pno));
+            sem_wait(&empty); // Wait until there's an empty slot in the buffer
+        }
+
+        sem_wait(&mutex); // Enter critical section to modify buffer
+
+        // Critical section: Insert item into buffer
+        printf("Producer %d: Entering critical region\n", *((int *)pno));
+        buffer[in] = item; // Insert the produced item at the 'in' index
+        printf("Producer %d: Inserted Item %d at %d\n", *((int *)pno), buffer[in], in);
+        in = (in + 1) % BufferSize; // Circular increment of 'in' index
+
+        printf("Producer %d: Leaving critical region\n", *((int *)pno)); // Exit critical section
+        sem_post(&mutex);  // Release the mutex lock
+        sem_post(&full);   // Signal that the buffer has at least one item
+    }
+}
+
+// Consumer thread function
+void *consumer(void *cno) {
+    for (int i = 0; i < MaxItems; i++) {
+        // If buffer is empty, consumer must wait until there's an item
+        if (sem_trywait(&full) != 0) {
+            printf("Consumer %d: Buffer is empty, waiting to consume...\n", *((int *)cno));
+            sem_wait(&full); // Wait until there's an item in the buffer
+        }
+
+        sem_wait(&mutex); // Enter critical section to modify buffer
+
+        // Critical section: Remove item from buffer
+        printf("Consumer %d: Entering critical region\n", *((int *)cno));
+        int item = buffer[out]; // Consume the item from the 'out' index
+        printf("Consumer %d: Removed Item %d from %d\n", *((int *)cno), item, out);
+        out = (out + 1) % BufferSize; // Circular increment of 'out' index
+
+        printf("Consumer %d: Leaving critical region\n", *((int *)cno)); // Exit critical section
+        sem_post(&mutex);  // Release the mutex lock
+        sem_post(&empty);  // Signal that the buffer has at least one empty slot
+    }
+}
+
+int main() {
+    int num_producers, num_consumers;
+
+    // Input the number of producers and consumers
+    printf("Enter the number of producers: ");
+    scanf("%d", &num_producers);
+    printf("Enter the number of consumers: ");
+    scanf("%d", &num_consumers);
+
+    // Allocate memory for producer and consumer thread arrays
+    pthread_t *pro = malloc(num_producers * sizeof(pthread_t));
+    pthread_t *con = malloc(num_consumers * sizeof(pthread_t));
+
+    // Initialize semaphores
+    sem_init(&empty, 0, BufferSize);  // Semaphore 'empty' is initialized to BufferSize (all slots are empty initially)
+    sem_init(&full, 0, 0);            // Semaphore 'full' is initialized to 0 (no items in the buffer initially)
+    sem_init(&mutex, 0, 1);           // Mutex is initialized to 1 (allowing mutual exclusion)
+
+    // Allocate memory for producer and consumer IDs
+    int *a_pro = malloc(num_producers * sizeof(int));
+    int *a_con = malloc(num_consumers * sizeof(int));
+
+    // Create producer threads
+    for (int i = 0; i < num_producers; i++) {
+        a_pro[i] = i + 1; // Assign producer ID
+        pthread_create(&pro[i], NULL, producer, (void *)&a_pro[i]); // Create producer thread
+    }
+
+    // Create consumer threads
+    for (int i = 0; i < num_consumers; i++) {
+        a_con[i] = i + 1; // Assign consumer ID
+        pthread_create(&con[i], NULL, consumer, (void *)&a_con[i]); // Create consumer thread
+    }
+
+    // Join producer threads (wait for all producers to finish)
+    for (int i = 0; i < num_producers; i++) {
+        pthread_join(pro[i], NULL);
+    }
+
+    // Join consumer threads (wait for all consumers to finish)
+    for (int i = 0; i < num_consumers; i++) {
+        pthread_join(con[i], NULL);
+    }
+
+    // Clean up: destroy semaphores and free memory
+    sem_destroy(&empty);
+    sem_destroy(&full);
+    sem_destroy(&mutex);
+    free(pro);   // Free memory for producer thread array
+    free(con);   // Free memory for consumer thread array
+    free(a_pro); // Free memory for producer IDs
+    free(a_con); // Free memory for consumer IDs
+
+    return 0; // Exit the program
+}
+
+---------------------------------------------------------------------------------
+8.//dining
+#include <pthread.h>
+#include <semaphore.h>
+#include <stdio.h>
+#include <unistd.h>
+
+#define N 5  // Number of philosophers (and forks)
+
+sem_t forks[N];  // Semaphore array to represent forks
+
+// Function that represents a philosopher
+void *philosopher(void *arg) {
+    int id = *((int *)arg);  // Philosopher's unique ID (index)
+
+    // Each philosopher thinks and eats 3 times
+    for (int i = 0; i < 3; i++) {
+        // Thinking
+        printf("Philosopher %d is thinking.\n", id);
+        usleep(100000);  // Simulate thinking for some time
+
+        // Pick up the forks (take the left fork and right fork)
+        sem_wait(&forks[id]);               // Wait (lock) the left fork
+        sem_wait(&forks[(id + 1) % N]);     // Wait (lock) the right fork (with wrap-around using modulus)
+
+        // Eating
+        printf("Philosopher %d is eating.\n", id);
+        usleep(100000);  // Simulate eating for some time
+
+        // Put down the forks
+        sem_post(&forks[id]);               // Release (unlock) the left fork
+        sem_post(&forks[(id + 1) % N]);     // Release (unlock) the right fork
+
+        // Finished eating
+        printf("Philosopher %d finished eating.\n", id);
+        usleep(100000);  // Simulate the time after eating
+    }
+
+    return NULL;  // End of philosopher's routine
+}
+
+int main() {
+    pthread_t philosophers[N];  // Array to store philosopher thread IDs
+    int ids[N];  // Array to store philosopher IDs (used as arguments)
+
+    // Initialize semaphores, each fork starts as available (initial value 1)
+    for (int i = 0; i < N; i++)
+        sem_init(&forks[i], 0, 1);
+
+    // Create philosopher threads
+    for (int i = 0; i < N; i++) {
+        ids[i] = i;  // Assign philosopher ID
+        pthread_create(&philosophers[i], NULL, philosopher, &ids[i]);  // Create a philosopher thread
+    }
+
+    // Wait for all philosopher threads to finish (join them)
+    for (int i = 0; i < N; i++)
+        pthread_join(philosophers[i], NULL);
+
+    // Destroy the semaphores used for forks
+    for (int i = 0; i < N; i++)
+        sem_destroy(&forks[i]);
+
+    return 0;  // Exit the program
+}
+
+//sem_wait(): Used by philosophers to pick up forks (i.e., block if the fork is not available).
+//sem_post(): Used to put down forks after eating and signal that forks are available for other philosophers.
+---------------------------------------------------------------------------------
+9,10,11,12//cpu sched
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+using namespace std;
+
+struct Process {
+    int id;
+    int arrivalTime;
+    int burstTime;
+    int priority;
+    int remainingTime;
+    int finishTime;
+    int turnaroundTime;
+    int waitingTime;
+};
+
+// Function to display the results
+void displayResults(vector<Process>& processes) {
+    cout << "\nProcess ID | Finish Time | Turnaround Time | Waiting Time\n";
+    for (auto& p : processes) {
+        cout << "    " << p.id << "       |      " << p.finishTime << "       |       " << p.turnaroundTime << "       |     " << p.waitingTime << "\n";
+    }
+}
+
+// FCFS Scheduling
+void FCFS(vector<Process>& processes) {
+    int currentTime = 0;
+    for (auto& p : processes) {
+        if (currentTime < p.arrivalTime) 
+            currentTime = p.arrivalTime;
+        p.finishTime = currentTime + p.burstTime;
+        p.turnaroundTime = p.finishTime - p.arrivalTime;
+        p.waitingTime = p.turnaroundTime - p.burstTime;
+        currentTime = p.finishTime;
+    }
+    cout << "\nFirst Come First Serve (FCFS):";
+    displayResults(processes);
+}
+
+// Non-Preemptive Priority
+void priorityNonPreemptive(vector<Process> processes) {
+    vector<Process> result;
+    int currentTime = 0;
+
+    sort(processes.begin(), processes.end(), [](const Process& a, const Process& b) {
+        return a.arrivalTime < b.arrivalTime;
+    });
+
+    while (!processes.empty()) {
+        vector<Process> readyQueue;
+        for (const auto& p : processes) {
+            if (p.arrivalTime <= currentTime) {
+                readyQueue.push_back(p);
+            }
+        }
+
+        if (readyQueue.empty()) {
+            currentTime++;
+            continue;
+        }
+
+        auto it = min_element(readyQueue.begin(), readyQueue.end(), [](const Process& a, const Process& b) {
+            return a.priority < b.priority;
+        });
+        
+        Process currentProcess = *it;
+        currentProcess.finishTime = currentTime + currentProcess.burstTime;
+        currentProcess.turnaroundTime = currentProcess.finishTime - currentProcess.arrivalTime;
+        currentProcess.waitingTime = currentProcess.turnaroundTime - currentProcess.burstTime;
+        
+        currentTime = currentProcess.finishTime;
+        
+        result.push_back(currentProcess);
+
+        processes.erase(remove_if(processes.begin(), processes.end(), [&](const Process& p) {
+            return p.id == currentProcess.id;
+        }), processes.end());
+    }
+    
+    cout << "\nPriority (Non-Preemptive):";
+    displayResults(result);
+}
+
+// Preemptive Priority
+void priorityPreemptive(vector<Process> processes) {
+    vector<Process> result;
+    int currentTime = 0, completed = 0;
+    int n = processes.size();
+    vector<int> remainingBurstTime(n);
+    for (int i = 0; i < n; i++) remainingBurstTime[i] = processes[i].burstTime;
+
+    while (completed != n) {
+        int idx = -1, highestPriority = 1e9;
+        for (int i = 0; i < n; i++) {
+            if (processes[i].arrivalTime <= currentTime && remainingBurstTime[i] > 0 && processes[i].priority < highestPriority) {
+                highestPriority = processes[i].priority;
+                idx = i;
+            }
+        }
+
+        if (idx != -1) {
+            remainingBurstTime[idx]--;
+            currentTime++;
+            if (remainingBurstTime[idx] == 0) {
+                completed++;
+                processes[idx].finishTime = currentTime;
+                processes[idx].turnaroundTime = currentTime - processes[idx].arrivalTime;
+                processes[idx].waitingTime = processes[idx].turnaroundTime - processes[idx].burstTime;
+                result.push_back(processes[idx]);
+            }
+        } else {
+            currentTime++;
+        }
+    }
+    cout << "\nPriority Scheduling (Preemptive):";
+    displayResults(result);
+}
+
+// Non-Preemptive SJF
+void SJFNonPreemptive(vector<Process> processes) {
+    vector<Process> result;
+    int currentTime = 0;
+
+    sort(processes.begin(), processes.end(), [](const Process& a, const Process& b) {
+        return a.arrivalTime < b.arrivalTime;
+    });
+
+    while (!processes.empty()) {
+        vector<Process> readyQueue;
+        for (const auto& p : processes) {
+            if (p.arrivalTime <= currentTime) {
+                readyQueue.push_back(p);
+            }
+        }
+
+        if (readyQueue.empty()) {
+            currentTime++;
+            continue;
+        }
+
+        auto it = min_element(readyQueue.begin(), readyQueue.end(), [](const Process& a, const Process& b) {
+            return a.burstTime < b.burstTime;
+        });
+        
+        Process currentProcess = *it;
+        currentProcess.finishTime = currentTime + currentProcess.burstTime;
+        currentProcess.turnaroundTime = currentProcess.finishTime - currentProcess.arrivalTime;
+        currentProcess.waitingTime = currentProcess.turnaroundTime - currentProcess.burstTime;
+        
+        currentTime = currentProcess.finishTime;
+        
+        result.push_back(currentProcess);
+
+        processes.erase(remove_if(processes.begin(), processes.end(), [&](const Process& p) {
+            return p.id == currentProcess.id;
+        }), processes.end());
+    }
+    
+    cout << "\nShortest Job First (Non-Preemptive):";
+    displayResults(result);
+}
+
+// Preemptive SJF
+void SJFPreemptive(vector<Process> processes) {
+    vector<Process> result;
+    int currentTime = 0, completed = 0;
+    int n = processes.size();
+    vector<int> remainingBurstTime(n);
+    for (int i = 0; i < n; i++) remainingBurstTime[i] = processes[i].burstTime;
+
+    while (completed != n) {
+        int idx = -1, minRemainingTime = 1e9;
+        for (int i = 0; i < n; i++) {
+            if (processes[i].arrivalTime <= currentTime && remainingBurstTime[i] > 0 && remainingBurstTime[i] < minRemainingTime) {
+                minRemainingTime = remainingBurstTime[i];
+                idx = i;
+            }
+        }
+
+        if (idx != -1) {
+            remainingBurstTime[idx]--;
+            currentTime++;
+            if (remainingBurstTime[idx] == 0) {
+                completed++;
+                processes[idx].finishTime = currentTime;
+                processes[idx].turnaroundTime = currentTime - processes[idx].arrivalTime;
+                processes[idx].waitingTime = processes[idx].turnaroundTime - processes[idx].burstTime;
+                result.push_back(processes[idx]);
+            }
+        } else {
+            currentTime++;
+        }
+    }
+    cout << "\nShortest Job First (Preemptive):";
+    displayResults(result);
+}
+
+// Round Robin Scheduling function
+void roundRobin(vector<Process>& processes, int quantum) {
+    int currentTime = 0;
+    int completed = 0;
+    int n = processes.size();
+    queue<int> q;
+
+    vector<bool> inQueue(n, false);  // Track if a process is already in the queue
+    vector<int> remainingBurstTime(n);
+    
+    for (int i = 0; i < n; i++) 
+        remainingBurstTime[i] = processes[i].burstTime;
+
+    // Start with processes that have arrived at time 0
+    for (int i = 0; i < n; i++) {
+        if (processes[i].arrivalTime == 0) {
+            q.push(i);
+            inQueue[i] = true;
+        }
+    }
+
+    while (completed < n) {
+        if (q.empty()) {
+            currentTime++;
+            for (int i = 0; i < n; i++) {
+                if (!inQueue[i] && processes[i].arrivalTime <= currentTime) {
+                    q.push(i);
+                    inQueue[i] = true;
+                }
+            }
+            continue;
+        }
+
+        int i = q.front();
+        q.pop();
+
+        // Execute the current process
+        if (remainingBurstTime[i] > quantum) {
+            currentTime += quantum;
+            remainingBurstTime[i] -= quantum;
+        } else {
+            currentTime += remainingBurstTime[i];
+            processes[i].finishTime = currentTime;
+            processes[i].turnaroundTime = currentTime - processes[i].arrivalTime;
+            processes[i].waitingTime = processes[i].turnaroundTime - processes[i].burstTime;
+            remainingBurstTime[i] = 0;
+            completed++;
+        }
+
+        // Check for newly arrived processes and add them to the queue
+        for (int j = 0; j < n; j++) {
+            if (!inQueue[j] && processes[j].arrivalTime <= currentTime && remainingBurstTime[j] > 0) {
+                q.push(j);
+                inQueue[j] = true;
+            }
+        }
+
+        // Re-add current process if it still has remaining burst time
+        if (remainingBurstTime[i] > 0) {
+            q.push(i);
+        }
+    }
+
+    cout << "\nRound Robin Scheduling:";
+    displayResults(processes);
+}
+
+
+int main() {
+    int n, quantum;
+    cout << "Enter the number of processes: ";
+    cin >> n;
+    vector<Process> processes(n);
+
+    for (int i = 0; i < n; i++) {
+        cout << "\nEnter arrival time, burst time, and priority for process " << i + 1 << ": ";
+        processes[i].id = i;
+        cin >> processes[i].arrivalTime >> processes[i].burstTime >> processes[i].priority;
+        processes[i].remainingTime = processes[i].burstTime;
+    }
+
+    cout << "Enter the time quantum for Round Robin: ";
+    cin >> quantum;
+
+    FCFS(processes);
+    SJFNonPreemptive(processes);
+    SJFPreemptive(processes);
+    priorityPreemptive(processes);
+    priorityNonPreemptive(processes);
+    roundRobin(processes, quantum);
+
+    return 0;
+}
+The program calculates the finish time of each process as the sum of its arrival time and burst time.
+The turnaround time is calculated as the difference between the finish time and arrival time.
+The waiting time is the difference between turnaround time and burst time.
+--------------------------------------------------------------------------
+22.//zomborph
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+// Function to create a zombie process
+void createZombieProcess() {
+    pid_t pid = fork();  // Create a new child process
+
+    if (pid < 0) {  // Check if fork failed
+        perror("Fork failed");
+        exit(1);  // Exit if fork fails
+    }
+
+    if (pid > 0) {  // If we're in the parent process
+        printf("Parent process: Zombie process created. PID = %d\n", pid);  // Print message with child PID
+    } 
+    else {  // If we're in the child process
+        printf("Child process exiting to become zombie.\n");  // Print message before exiting
+        exit(0);  // Exit child process, causing it to become a zombie
+    }
+}
+
+// Function to create an orphan process
+void createOrphanProcess() {
+    pid_t pid = fork();  // Create a new child process
+    if (pid < 0) {  // Check if fork failed
+        perror("Fork failed");
+        exit(1);  // Exit if fork fails
+    }
+
+    if (pid > 0) {  // If we're in the parent process
+        printf("Parent process exiting to create orphan process.\n");  // Print message
+        exit(0);  // Exit parent process, making the child an orphan
+    } 
+    else {  // If we're in the child process  
+        printf("Child process (orphan) continuing after parent termination. PID = %d\n", getpid());  // Print orphan message with child PID
+    }
+}
+
+// Function to calculate the sum of even and odd numbers
+void sumEvenOdd(int arr[], int size) {
+    pid_t pid = fork();  // Create a new child process
+
+    if (pid < 0) {  // Check if fork failed
+        perror("Fork failed");
+        exit(1);  // Exit if fork fails
+    }
+
+    if (pid > 0) {  // If we're in the parent process
+        int evenSum = 0;  // Variable to store the sum of even numbers
+        for (int i = 0; i < size; i++) {  // Loop through the array
+            if (arr[i] % 2 == 0) {  // If the number is even
+                evenSum += arr[i];  // Add it to the evenSum
+            }
+        }
+        printf("Parent process: Sum of even numbers = %d\n", evenSum);  // Print the sum of even numbers
+        wait(NULL);  // Wait for the child process to finish
+    } 
+    else {  // If we're in the child process
+        int oddSum = 0;  // Variable to store the sum of odd numbers
+        for (int i = 0; i < size; i++) {  // Loop through the array
+            if (arr[i] % 2 != 0) {  // If the number is odd
+                oddSum += arr[i];  // Add it to the oddSum
+            }
+        }
+        printf("Child process: Sum of odd numbers = %d\n", oddSum);  // Print the sum of odd numbers
+        exit(0);  // Exit the child process after completion
+    }
+}
+
+// Main function
+int main() {
+    int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};  // Initialize an array with 10 numbers
+    int size = sizeof(arr) / sizeof(arr[0]);  // Calculate the number of elements in the array
+    printf("Calculating sum of even and odd numbers:\n");  // Print message before calling sumEvenOdd
+    sumEvenOdd(arr, size);  // Call the function to calculate sums of even and odd numbers
+
+    printf("\nCreating a zombie process:\n");  // Print message before creating a zombie process
+    createZombieProcess();  // Create a zombie process
+
+    printf("\nCreating an orphan process:\n");  // Print message before creating an orphan process
+    createOrphanProcess();  // Create an orphan process
+
+    return 0;  // Exit the main function and end the program
+}
+
+I/p:1 2 3 4 5 6 7 8 9 10
+------------------------------------------------------------------------------------
+23.//stud_db
+#!/bin/bash
+DB_FILE="student_database.txt"
+show_menu() {
+    echo "Select an operation:"
+    echo "a) Insert a record"
+    echo "b) Delete a record"
+    echo "c) Update a record"
+    echo "d) Search for a record"
+    echo "e) Exit"
+    read -p "Enter your choice: " choice
+}
+insert_record() {
+    read -p "Enter Student ID: " id
+    read -p "Enter Student Name: " name
+    read -p "Enter Student Grade: " grade
+    echo "$id,$name,$grade" >> "$DB_FILE"
+    echo "Record inserted successfully."
+}
+delete_record() {
+    read -p "Enter Student ID to delete: " id
+    if grep -q "^$id," "$DB_FILE"; then
+        grep -v "^$id," "$DB_FILE" > temp_file && mv temp_file "$DB_FILE"
+        echo "Record with ID $id deleted successfully."
+    else
+        echo "Record with ID $id not found."
+    fi
+}
+update_record() {
+    read -p "Enter Student ID to update: " id
+    if grep -q "^$id," "$DB_FILE"; then
+        read -p "Enter new Student Name: " name
+        read -p "Enter new Student Grade: " grade
+        grep -v "^$id," "$DB_FILE" > temp_file
+        echo "$id,$name,$grade" >> temp_file
+        mv temp_file "$DB_FILE"
+        echo "Record with ID $id updated successfully."
+    else
+        echo "Record with ID $id not found."
+    fi
+}
+search_record() {
+    read -p "Enter Student ID to search: " id
+    if grep -q "^$id," "$DB_FILE"; then
+        echo "Record found:"
+        grep "^$id," "$DB_FILE"
+    else
+        echo "Record with ID $id not found."
+    fi
+}
+while true; do
+    show_menu
+    case $choice in
+        a|A) insert_record ;;
+        b|B) delete_record ;;
+        c|C) update_record ;;
+        d|D) search_record ;;
+        e|E) echo "Exiting..."; exit 0 ;;
+        *) echo "Invalid option. Please try again." ;;
+    esac
+done
+
+Offline :
+declare -A student_db
+show_menu() {
+    echo "Select an operation:"
+    echo "a) Insert a record"
+    echo "b) Delete a record"
+    echo "c) Update a record"
+    echo "d) Search for a record"
+    echo "e) Exit"
+    read -p "Enter your choice: " choice
+}
+
+insert_record() {
+    read -p "Enter Student ID: " id
+    read -p "Enter Student Name: " name
+    read -p "Enter Student Grade: " grade
+    student_db["$id"]="$name,$grade"
+    echo "Record inserted successfully."
+}
+
+delete_record() {
+    read -p "Enter Student ID to delete: " id
+    if [[ -n "${student_db[$id]}" ]]; then
+        unset student_db["$id"]
+        echo "Record with ID $id deleted successfully."
+    else
+        echo "Record with ID $id not found."
+    fi
+}
+
+update_record() {
+    read -p "Enter Student ID to update: " id
+    if [[ -n "${student_db[$id]}" ]]; then
+        read -p "Enter new Student Name: " name
+        read -p "Enter new Student Grade: " grade
+        student_db["$id"]="$name,$grade"
+        echo "Record with ID $id updated successfully."
+    else
+        echo "Record with ID $id not found."
+    fi
+}
+
+search_record() {
+    read -p "Enter Student ID to search: " id
+    if [[ -n "${student_db[$id]}" ]]; then
+        echo "Record found:"
+        echo "$id: ${student_db[$id]}"
+    else
+        echo "Record with ID $id not found."
+    fi
+}
+
+while true; do
+    show_menu
+    case $choice in
+        a|A) insert_record ;;
+        b|B) delete_record ;;
+        c|C) update_record ;;
+        d|D) search_record ;;
+        e|E) echo "Exiting..."; exit 0 ;;
+        *) echo "Invalid option. Please try again." ;;
+    esac
+done
+-------------------------------------------------------------------------------------
+26.//operand-opcode:
+#include <iostream>
+#include <cstring>
+#include <cctype>  // For isdigit() function
+using namespace std;
+
+class Job {
+private:
+    char M[300][4];  // Memory (300 locations, each of 4 chars)
+    char IR[4];      // Instruction Register (4 chars)
+    int IC;          // Instruction Counter
+    int PI;          // Program Interrupt (PI = 1 for opcode error, PI = 2 for operand error)
+    int TTL;         // Time Limit (TTL) for the job
+
+public:
+    Job();  // Constructor
+    void LOAD();  // Load the job into memory
+    void EXECUTEUSERPROGRAM();  // Execute the user program
+    void MOS();  // Handle interrupts (in case of opcode or operand errors)
+    void TERMINATE();  // Terminate the job with an error message
+};
+
+// Constructor: Initializes all registers and memory
+Job::Job() {
+    IC = 0;
+    PI = 0;
+    TTL = 0;
+    memset(M, 0, sizeof(M));  // Initialize memory with zero
+    memset(IR, 0, sizeof(IR));  // Initialize IR with zero
+}
+
+// Load the job into memory (hardcoded job input in $AMJ format)
+void Job::LOAD() {
+    // Hardcoded job input in $AMJ format
+    string input[] = {
+        "$AMJ000100030001",  // Job ID = 0001, TTL = 0001, TLL = 0003
+        "GD10",  // Valid opcode with numeric operand
+        "PL10",  // Invalid operand (alphanumeric operand)
+        "H000",  // Valid opcode
+        "$END0001"  // End of job input
+    };
+
+    // Parse $AMJ line to initialize TTL
+    TTL = stoi(input[0].substr(4, 4));  // Get TTL from $AMJ line
+
+    // Store instructions in memory (skip the $AMJ and $END lines)
+    for (int i = 1; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            M[i-1][j] = input[i][j];  // Copy the instruction into memory
+        }
+    }
+}
+
+// Execute the user program and check for opcode and operand errors
+void Job::EXECUTEUSERPROGRAM() {
+    while (true) {
+        // Fetch the next instruction
+        for (int i = 0; i < 4; i++) {
+            IR[i] = M[IC][i];
+        }
+
+        // Display the instruction being executed
+        cout << "Executing Instruction: " << IR[0] << IR[1] << IR[2] << IR[3] << endl;
+
+        // Check for opcode error (invalid instruction)
+        if (IR[0] != 'G' && IR[0] != 'P' && IR[0] != 'L' && IR[0] != 'S' && IR[0] != 'C' && IR[0] != 'B') {
+            PI = 1;  // Opcode error
+            MOS();  // Raise interrupt for opcode error
+            break;
+        }
+
+        if (IR[1] != 'D' && IR[1] != 'R' && IR[1] != 'T') {
+            PI = 1;  // Opcode error
+            MOS();  // Raise interrupt for opcode error
+            break;
+        }
+
+        // Check for operand error (if the last two characters are not numeric)
+        if (!isdigit(IR[2]) || !isdigit(IR[3])) {
+            PI = 2;  // Operand error
+            MOS();  // Raise interrupt for operand error
+            break;
+        }
+
+        // Halt if instruction is 'H'
+        if (IR[0] == 'H') {
+            cout << "Halting execution as per 'H' instruction." << endl;
+            break;
+        }
+
+        IC++;  // Increment instruction counter
+    }
+}
+
+// Handle interrupts (in this case, opcode or operand error)
+void Job::MOS() {
+    if (PI == 1) {
+        TERMINATE();  // Terminate with opcode error
+    } else if (PI == 2) {
+        TERMINATE();  // Terminate with operand error
+    }
+}
+
+// Terminate the job with an error message
+void Job::TERMINATE() {
+    if (PI == 1) {
+        cout << "Error: Operation Code Error (PI = 1)" << endl;
+    } else if (PI == 2) {
+        cout << "Error: Operand Error (PI = 2)" << endl;
+    }
+    cout << "IC: " << IC << ", IR: " << IR[0] << IR[1] << IR[2] << IR[3] << endl;
+    cout << "TTL: " << TTL << endl;
+}
+
+int main() {
+    Job j;
+    j.LOAD();  // Load the job into memory
+    j.EXECUTEUSERPROGRAM();  // Start executing the user program
+    return 0;
+}
+--------------------------------------------------------------------------------------
+25.//load alp
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_INSTRUCTIONS 100
+#define MAX_LINE_LENGTH 50
+
+void load_alp_to_memory() {
+    // Hardcoded ALP instructions
+    char main_memory[MAX_INSTRUCTIONS][MAX_LINE_LENGTH] = {
+        "LOAD R1, 100",
+        "STORE R2, R1",
+        "ADD R1, R2",
+        "SUB R3, R1",
+        "JMP 0", // Example instruction
+        "HALT"
+    };
+
+    int address = 6; // Number of hardcoded instructions
+
+    printf("ALP Program loaded into main memory:\n");
+    for (int i = 0; i < address; i++) {
+        printf("Address %d: %s\n", i, main_memory[i]);
+    }
+}
+
+int main() {
+    load_alp_to_memory();
+    return 0;
+}
+------------------------------------------------------------------------------------------
+24.//file handling
+
+---------------------------------------------------------------------------------------------
+
+Copy data char,line:
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Sample data to simulate file content
+char sourceData[] = "This is a test file.\nIt has multiple lines.\nEach line will be copied in different ways.";
+
+// Function to simulate copying a file character by character
+void copyDataCharacterByCharacter(const char *sourceData, char *destData) {
+    int i = 0;
+    while (sourceData[i] != '\0') {
+        destData[i] = sourceData[i];  // Copy character by character
+        i++;
+    }
+    destData[i] = '\0';  // Null-terminate the destination string
+    printf("Data copied character by character:\n%s\n", destData);
+}
+
+// Function to simulate copying a file line by line
+void copyDataLineByLine(const char *sourceData, char *destData) {
+    int i = 0, j = 0;
+    while (sourceData[i] != '\0') {
+        // Copy one line at a time (simulating line-by-line copy)
+        while (sourceData[i] != '\n' && sourceData[i] != '\0') {
+            destData[j] = sourceData[i];
+            i++;
+            j++;
+        }
+        if (sourceData[i] == '\n') {
+            destData[j] = sourceData[i];  // Copy the newline character
+            i++;
+            j++;
+        }
+        destData[j] = '\0';  // Null-terminate the destination string
+        printf("Data copied line by line:\n%s\n", destData);
+    }
+}
+
+int main() {
+    char destCharData[1024];  // Destination array for character-by-character copy
+    char destLineData[1024];  // Destination array for line-by-line copy
+
+    printf("Simulating file copy:\n");
+
+    // Simulate copying data character by character
+    printf("\nCopying data character by character...\n");
+    copyDataCharacterByCharacter(sourceData, destCharData);
+
+    // Simulate copying data line by line
+    printf("\nCopying data line by line...\n");
+    copyDataLineByLine(sourceData, destLineData);
+
+    return 0;
+}
